@@ -38,15 +38,14 @@ export default class GildedRose {
   items: Item[];
 
   constructor() {
-    this.items = [];
-    this.items.push(new Item('+5 Dexterity Vest', 10, 20));
-    this.items.push(new Item('Aged Brie', 2, 0));
-    this.items.push(new Item('Elixir of the Mongoose', 5, 7));
-    this.items.push(new Item('Sulfuras, Hand of Ragnaros', 0, 80));
-    this.items.push(
-      new Item('Backstage passes to a TAFKAL80ETC concert', 15, 20)
-    );
-    this.items.push(new Item('Conjured Mana Cake', 3, 6));
+    this.items = [
+      new Item('+5 Dexterity Vest', 10, 20),
+      new Item('Aged Brie', 2, 0),
+      new Item('Elixir of the Mongoose', 5, 7),
+      new Item('Sulfuras, Hand of Ragnaros', 0, 80),
+      new Item('Backstage passes to a TAFKAL80ETC concert', 15, 20),
+      new Item('Conjured Mana Cake', 3, 6),
+    ];
   }
 
   updateQuality(): this {
