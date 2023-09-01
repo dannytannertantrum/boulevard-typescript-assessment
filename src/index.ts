@@ -29,8 +29,8 @@ export class Item {
   
   High level steps:
     - Add tests to ensure legacy behavior actually WORKS before refactoring - DONE
-    - Do incremental refactors and ensure tests pass each step of the way
-      - Add any new tests as needed
+    - Do incremental refactors and ensure tests pass each step of the way - DONE
+      - Add any new tests as needed - DONE
     - Implement "Conjured" items
 */
 
@@ -77,33 +77,52 @@ export default class GildedRose {
     }
   }
 
+  /**
+   * - decrease quality value of an item each day
+   * - decrease quality value twice as fast if sellIn < 0
+   */
+  public updateStandardItem(item: Item): void {
+    item.sellIn--;
+    item.quality--;
+    if (item.sellIn < 0) {
+      item.quality--;
+    }
+  }
+
+  /**
+   * - increase Aged Brie quality over time
+   */
+  public updateAgedBrie(item: Item): void {
+    item.sellIn--;
+    item.quality++;
+    if (item.sellIn < 0) {
+      item.quality++;
+    }
+  }
+
   updateQuality(): this {
     for (const item of this.items) {
-      if (item.name === this.BACKSTAGE_PASSES) {
-        this.updateBackstagePasses(item);
+      switch (item.name) {
+        case this.AGED_BRIE:
+          this.updateAgedBrie(item);
+          break;
+        case this.BACKSTAGE_PASSES:
+          this.updateBackstagePasses(item);
+          break;
+        case this.SULFURAS:
+          // Sulfuras does not change
+          break;
+        case this.CONJURED:
+          // Add this next
+          break;
+        default:
+          this.updateStandardItem(item);
+          break;
       }
-      if (item.name !== this.BACKSTAGE_PASSES && item.name !== this.SULFURAS) {
-        if (item.name != 'Aged Brie') {
-          if (item.quality > 0) {
-            item.quality = item.quality - 1;
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1;
-          }
-        }
-        item.sellIn = item.sellIn - 1;
-        if (item.sellIn < 0) {
-          if (item.name != 'Aged Brie') {
-            if (item.quality > 0) {
-              item.quality = item.quality - 1;
-            }
-          } else {
-            if (item.quality < 50) {
-              item.quality = item.quality + 1;
-            }
-          }
-        }
+
+      // Ensure quality is between 0 and 50
+      if (item.name !== this.SULFURAS) {
+        item.quality = Math.max(0, Math.min(50, item.quality));
       }
     }
     return this;
