@@ -1,4 +1,4 @@
-class Item {
+export class Item {
   name: string;
   sellIn: number; // number of days to sell an item
   quality: number; // number denoting how valuable an item is
@@ -37,62 +37,75 @@ class Item {
 export default class GildedRose {
   items: Item[];
 
+  // CONSTANTS
+  DEXTERITY_VEST = '+5 Dexterity Vest';
+  AGED_BRIE = 'Aged Brie';
+  ELIXIR = 'Elixir of the Mongoose';
+  SULFURAS = 'Sulfuras, Hand of Ragnaros';
+  BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert';
+  CONJURED = 'Conjured Mana Cake';
+
   constructor() {
     this.items = [
-      new Item('+5 Dexterity Vest', 10, 20),
-      new Item('Aged Brie', 2, 0),
-      new Item('Elixir of the Mongoose', 5, 7),
-      new Item('Sulfuras, Hand of Ragnaros', 0, 80),
-      new Item('Backstage passes to a TAFKAL80ETC concert', 15, 20),
-      new Item('Conjured Mana Cake', 3, 6),
+      new Item(this.DEXTERITY_VEST, 10, 20),
+      new Item(this.AGED_BRIE, 2, 0),
+      new Item(this.ELIXIR, 5, 7),
+      new Item(this.SULFURAS, 0, 80),
+      new Item(this.BACKSTAGE_PASSES, 15, 20),
+      new Item(this.CONJURED, 3, 6),
     ];
+  }
+
+  /**
+   * - increase quality for Backstage passes when sellIn decreases
+   * - increase Backstage value by 2 when there are 10 days or less
+   * - increase Backstage value by 3 when there are 5 days or less
+   * - drops Backstage quality to zero after the concert
+   */
+  public updateBackstagePasses(item: Item): void {
+    item.sellIn--;
+    if (item.sellIn < 0) {
+      item.quality = 0;
+    } else if (item.sellIn < 5) {
+      item.quality += 3;
+    } else if (item.sellIn < 10) {
+      item.quality += 2;
+    } else {
+      item.quality++;
+    }
   }
 
   updateQuality(): this {
     for (const item of this.items) {
-      if (
-        item.name != 'Aged Brie' &&
-        item.name != 'Backstage passes to a TAFKAL80ETC concert'
-      ) {
-        if (item.quality > 0) {
-          if (item.name != 'Sulfuras, Hand of Ragnaros') {
-            item.quality = item.quality - 1;
-          }
-        }
-      } else {
-        if (item.quality < 50) {
-          item.quality = item.quality + 1;
-          if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (item.sellIn < 11) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1;
-              }
-            }
-            if (item.sellIn < 6) {
-              if (item.quality < 50) {
-                item.quality = item.quality + 1;
-              }
-            }
-          }
-        }
+      if (item.name === this.BACKSTAGE_PASSES) {
+        this.updateBackstagePasses(item);
       }
-      if (item.name != 'Sulfuras, Hand of Ragnaros') {
-        item.sellIn = item.sellIn - 1;
-      }
-      if (item.sellIn < 0) {
+      if (item.name !== 'Backstage passes to a TAFKAL80ETC concert') {
         if (item.name != 'Aged Brie') {
-          if (item.name != 'Backstage passes to a TAFKAL80ETC concert') {
+          if (item.quality > 0) {
+            if (item.name != 'Sulfuras, Hand of Ragnaros') {
+              item.quality = item.quality - 1;
+            }
+          }
+        } else {
+          if (item.quality < 50) {
+            item.quality = item.quality + 1;
+          }
+        }
+        if (item.name != 'Sulfuras, Hand of Ragnaros') {
+          item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn < 0) {
+          if (item.name != 'Aged Brie') {
             if (item.quality > 0) {
               if (item.name != 'Sulfuras, Hand of Ragnaros') {
                 item.quality = item.quality - 1;
               }
             }
           } else {
-            item.quality = item.quality - item.quality;
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality = item.quality + 1;
+            if (item.quality < 50) {
+              item.quality = item.quality + 1;
+            }
           }
         }
       }

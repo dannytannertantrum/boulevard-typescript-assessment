@@ -1,4 +1,4 @@
-import GildedRose from '../src';
+import GildedRose, { Item } from '../src';
 
 /*
 this.items.push(new Item('+5 Dexterity Vest', 10, 20));
@@ -90,6 +90,34 @@ describe('GildedRose', () => {
       gildedRose.updateQuality();
 
       expect(gildedRose.items[4].quality).toBe(0);
+    });
+  });
+
+  describe('updateBackstagePasses', () => {
+    const gildedRose = new GildedRose();
+    let backstageConcertItem: Item;
+
+    it('increases an item quality value by 2 when there are 10 days or less', () => {
+      backstageConcertItem = new Item('Concert', 10, 10);
+
+      gildedRose.updateBackstagePasses(backstageConcertItem);
+
+      expect(backstageConcertItem.quality).toBe(12);
+    });
+
+    it('increases Backstage value by 3 when there are 5 days or less', () => {
+      backstageConcertItem = new Item('Concert', 5, 10);
+
+      gildedRose.updateBackstagePasses(backstageConcertItem);
+
+      expect(backstageConcertItem.quality).toBe(13);
+    });
+    it('drops Backstage quality to zero after the concert', () => {
+      backstageConcertItem = new Item('Concert', 0, 10);
+
+      gildedRose.updateBackstagePasses(backstageConcertItem);
+
+      expect(backstageConcertItem.quality).toBe(0);
     });
   });
 });
