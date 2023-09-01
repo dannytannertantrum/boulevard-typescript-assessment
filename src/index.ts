@@ -10,30 +10,6 @@ export class Item {
   }
 }
 
-/* at EOD, the system lowers the value of an item
-  - sellIn < 0 quality degrades twice as fast
-  - quality is never negative
-  - "Aged Brie" increases quality with time
-  - quality is never more than 50
-  - "Sulfuras" never has to be sold nor does quality decrease
-    - always quality of 80 and never changes
-  - "Backstage passes" increase quality when sellIn decreases
-    - also increases by 2 when there are 10 days or less
-    - increases by 3 when there are 5 days or less
-    - but quality drops to zero after the concert
-  
-  UPDATES:
-    - "Conjured" items quality decrease twice as fast
-    - don't touch Item class or items property
-    - preserve legacy behavior
-  
-  High level steps:
-    - Add tests to ensure legacy behavior actually WORKS before refactoring - DONE
-    - Do incremental refactors and ensure tests pass each step of the way - DONE
-      - Add any new tests as needed - DONE
-    - Implement "Conjured" items - DONE
-*/
-
 export default class GildedRose {
   items: Item[];
 
