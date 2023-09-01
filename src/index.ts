@@ -42,6 +42,8 @@ export default class GildedRose {
   AGED_BRIE = 'Aged Brie';
   ELIXIR = 'Elixir of the Mongoose';
   SULFURAS = 'Sulfuras, Hand of Ragnaros';
+  SULFURAS_QUALITY = 80; // Quality and sellIn should never change here, so make them constants
+  SULFURAS_SELL_IN = 0;
   BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert';
   CONJURED = 'Conjured Mana Cake';
 
@@ -50,7 +52,7 @@ export default class GildedRose {
       new Item(this.DEXTERITY_VEST, 10, 20),
       new Item(this.AGED_BRIE, 2, 0),
       new Item(this.ELIXIR, 5, 7),
-      new Item(this.SULFURAS, 0, 80),
+      new Item(this.SULFURAS, this.SULFURAS_SELL_IN, this.SULFURAS_QUALITY),
       new Item(this.BACKSTAGE_PASSES, 15, 20),
       new Item(this.CONJURED, 3, 6),
     ];
@@ -80,27 +82,21 @@ export default class GildedRose {
       if (item.name === this.BACKSTAGE_PASSES) {
         this.updateBackstagePasses(item);
       }
-      if (item.name !== 'Backstage passes to a TAFKAL80ETC concert') {
+      if (item.name !== this.BACKSTAGE_PASSES && item.name !== this.SULFURAS) {
         if (item.name != 'Aged Brie') {
           if (item.quality > 0) {
-            if (item.name != 'Sulfuras, Hand of Ragnaros') {
-              item.quality = item.quality - 1;
-            }
+            item.quality = item.quality - 1;
           }
         } else {
           if (item.quality < 50) {
             item.quality = item.quality + 1;
           }
         }
-        if (item.name != 'Sulfuras, Hand of Ragnaros') {
-          item.sellIn = item.sellIn - 1;
-        }
+        item.sellIn = item.sellIn - 1;
         if (item.sellIn < 0) {
           if (item.name != 'Aged Brie') {
             if (item.quality > 0) {
-              if (item.name != 'Sulfuras, Hand of Ragnaros') {
-                item.quality = item.quality - 1;
-              }
+              item.quality = item.quality - 1;
             }
           } else {
             if (item.quality < 50) {
