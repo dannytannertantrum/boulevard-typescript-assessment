@@ -28,7 +28,7 @@ class Item {
     - preserve legacy behavior
   
   High level steps:
-    - Add tests to ensure legacy behavior actually WORKS before refactoring
+    - Add tests to ensure legacy behavior actually WORKS before refactoring - DONE
     - Do incremental refactors and ensure tests pass each step of the way
       - Add any new tests as needed
     - Implement "Conjured" items
