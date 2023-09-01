@@ -13,14 +13,14 @@ this.items.push(new Item('Conjured Mana Cake', 3, 6));
 
 describe('GildedRose', () => {
   describe('updateQuality Method', () => {
-    describe('Standard item updates', () => {
+    describe('Regular updates by item', () => {
       let gildedRose: GildedRose;
       beforeEach(() => {
         gildedRose = new GildedRose();
         gildedRose.updateQuality();
       });
 
-      it('should decrease quality for regular items by 1', () => {
+      it('should decrease quality for standard items by 1', () => {
         expect(gildedRose.items[0].quality).toBe(19);
         expect(gildedRose.items[0].sellIn).toBe(9);
         expect(gildedRose.items[2].quality).toBe(6);
@@ -41,16 +41,30 @@ describe('GildedRose', () => {
         expect(gildedRose.items[4].quality).toBe(21);
         expect(gildedRose.items[4].sellIn).toBe(14);
       });
+
+      it('should decrease quality by 2 each day for Conjured items', () => {
+        expect(gildedRose.items[5].quality).toBe(4);
+      });
     });
 
     describe('Edge case updates', () => {
-      it('should decrease quality twice as fast when sellIn < 0', () => {
+      it('should decrease quality twice as fast for all items except Aged Brie and backstage passes when sellIn < 0', () => {
         const gildedRose = new GildedRose();
-        gildedRose.items[0].sellIn = 0;
+        gildedRose.items.forEach(item => (item.sellIn = 0));
 
         gildedRose.updateQuality();
 
         expect(gildedRose.items[0].quality).toBe(18);
+        // Not completely sure if Brie should reverse and DOUBLE when sellIn < 0,
+        // so kept it increasing in value at the same pace because it seems likely it's a different behavior entirely
+        expect(gildedRose.items[1].quality).toBe(1);
+        expect(gildedRose.items[2].quality).toBe(5);
+        expect(gildedRose.items[3].quality).toBe(80);
+        expect(gildedRose.items[4].quality).toBe(0);
+        // Assuming if Conjured items decrease in value twice as fast,
+        // then it should double when sellIn < 0 and drop in value by 4
+        // Maybe the goblin in the corner can help clarify these thigns?
+        expect(gildedRose.items[5].quality).toBe(2);
       });
     });
 
@@ -80,12 +94,14 @@ describe('GildedRose', () => {
 
         expect(gildedRose.items[4].quality).toBe(22);
       });
+
       it('increases Backstage value by 3 when there are 5 days or less', () => {
         gildedRose.items[4].sellIn = 5;
         gildedRose.updateQuality();
 
         expect(gildedRose.items[4].quality).toBe(23);
       });
+
       it('drops Backstage quality to zero after the concert', () => {
         gildedRose.items[4].sellIn = 0;
         gildedRose.updateQuality();
@@ -155,6 +171,19 @@ describe('GildedRose', () => {
         gildedRose.updateAgedBrie(agedBrieItem);
 
         expect(agedBrieItem.quality).toBe(11);
+      });
+    });
+
+    describe('updateConjuredItem', () => {
+      const gildedRose = new GildedRose();
+      let conjuredItem: Item;
+
+      it('should decrease quality value by 2 each day', () => {
+        conjuredItem = new Item('Valek', 10, 10);
+
+        gildedRose.updateConjuredItem(conjuredItem);
+
+        expect(conjuredItem.quality).toBe(8);
       });
     });
   });

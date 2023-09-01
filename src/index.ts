@@ -31,7 +31,7 @@ export class Item {
     - Add tests to ensure legacy behavior actually WORKS before refactoring - DONE
     - Do incremental refactors and ensure tests pass each step of the way - DONE
       - Add any new tests as needed - DONE
-    - Implement "Conjured" items
+    - Implement "Conjured" items - DONE
 */
 
 export default class GildedRose {
@@ -95,8 +95,16 @@ export default class GildedRose {
   public updateAgedBrie(item: Item): void {
     item.sellIn--;
     item.quality++;
+  }
+
+  /**
+   * - Conjured items degrade in quality value twice as fast
+   */
+  public updateConjuredItem(item: Item): void {
+    item.sellIn--;
+    item.quality -= 2;
     if (item.sellIn < 0) {
-      item.quality++;
+      item.quality -= 2;
     }
   }
 
@@ -113,7 +121,7 @@ export default class GildedRose {
           // Sulfuras does not change
           break;
         case this.CONJURED:
-          // Add this next
+          this.updateConjuredItem(item);
           break;
         default:
           this.updateStandardItem(item);
@@ -127,62 +135,4 @@ export default class GildedRose {
     }
     return this;
   }
-
-  // Original untouched for reference, but delete after complete refactor
-  // updateQuality(): this {
-  //   for (var i = 0; i < this.items.length; i++) {
-  //     if (
-  //       this.items[i].name != 'Aged Brie' &&
-  //       this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert'
-  //     ) {
-  //       if (this.items[i].quality > 0) {
-  //         if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-  //           this.items[i].quality = this.items[i].quality - 1;
-  //         }
-  //       }
-  //     } else {
-  //       if (this.items[i].quality < 50) {
-  //         this.items[i].quality = this.items[i].quality + 1;
-  //         if (
-  //           this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert'
-  //         ) {
-  //           if (this.items[i].sellIn < 11) {
-  //             if (this.items[i].quality < 50) {
-  //               this.items[i].quality = this.items[i].quality + 1;
-  //             }
-  //           }
-  //           if (this.items[i].sellIn < 6) {
-  //             if (this.items[i].quality < 50) {
-  //               this.items[i].quality = this.items[i].quality + 1;
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //     if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-  //       this.items[i].sellIn = this.items[i].sellIn - 1;
-  //     }
-  //     if (this.items[i].sellIn < 0) {
-  //       if (this.items[i].name != 'Aged Brie') {
-  //         if (
-  //           this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert'
-  //         ) {
-  //           if (this.items[i].quality > 0) {
-  //             if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-  //               this.items[i].quality = this.items[i].quality - 1;
-  //             }
-  //           }
-  //         } else {
-  //           this.items[i].quality =
-  //             this.items[i].quality - this.items[i].quality;
-  //         }
-  //       } else {
-  //         if (this.items[i].quality < 50) {
-  //           this.items[i].quality = this.items[i].quality + 1;
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return this;
-  // }
 }
