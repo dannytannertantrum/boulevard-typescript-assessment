@@ -11,7 +11,11 @@ export class Item {
 }
 
 export default class GildedRose {
-  items: Item[];
+  // OTHER UPDATES
+  // - can we MOVE items? If so, move it into the constructor using shorthand syntax
+  //  - allowing greater flexibility in creating new instances
+  // - move everything into one beforeEach in the tests
+  // - use array destructuring and name things as opposed to doing item numbers
 
   // CONSTANTS
   DEXTERITY_VEST = '+5 Dexterity Vest';
@@ -23,16 +27,7 @@ export default class GildedRose {
   BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert';
   CONJURED = 'Conjured Mana Cake';
 
-  constructor() {
-    this.items = [
-      new Item(this.DEXTERITY_VEST, 10, 20),
-      new Item(this.AGED_BRIE, 2, 0),
-      new Item(this.ELIXIR, 5, 7),
-      new Item(this.SULFURAS, this.SULFURAS_SELL_IN, this.SULFURAS_QUALITY),
-      new Item(this.BACKSTAGE_PASSES, 15, 20),
-      new Item(this.CONJURED, 3, 6),
-    ];
-  }
+  constructor(public items: Item[]) {}
 
   /**
    * - increase quality for Backstage passes when sellIn decreases
